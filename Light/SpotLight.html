@@ -9,6 +9,9 @@
     <p>聚光灯Demo</p>
     <div class="container"></div>
     <script type="text/javascript">
+
+      var alpha = 0;
+
       // 渲染器
       var container = document.querySelector('.container');
       var renderer = new THREE.WebGLRenderer({
@@ -17,60 +20,72 @@
       renderer.setSize( 400, 400 );
       renderer.setClearColor( 0x000000 );
       renderer.shadowMap.enabled = true;
+      renderer.shadowMapSoft = true;
       container.appendChild( renderer.domElement );
 
       // 场景
       var scene = new THREE.Scene();
 
       // 相机
-      var camera = new THREE.OrthographicCamera( -1, 1, 1, -1, 1, 100 );
-      camera.position.set( 4, 3, 5 );
+      var camera = new THREE.OrthographicCamera( -5, 5, 5, -5, 0.1, 100 );
+      camera.position.set( 5, 15, 25 );
       camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
       scene.add( camera );
 
       // 物体
       var mesh1 = new THREE.Mesh(
-        new THREE.CubeGeometry( 0.2, 0.2, 0.2 ),
+        new THREE.CubeGeometry( 1, 1, 1 ),
         new THREE.MeshLambertMaterial({
           color: 0x00ff00
         })
       );
-      mesh1.position.set( -0.5, 0, 0 );
+      mesh1.castShadow = true;
       scene.add( mesh1 );
 
       // 点光源
-      var light = new THREE.SpotLight( 0xffff00, 1, 100, Math.PI / 6, 0.5, 25 );
-      light.position.set( 0, 2, 1 );
+      var light = new THREE.SpotLight( 0xffff00, 1, 100, Math.PI / 6, 25 );
+      light.position.set( 2, 5, 3 );
+      light.castShadow = true;
+      light.shadow.camera.near = 2;
+      light.shadow.camera.far = 10;
+      light.shadow.camera.fov = 30;
+      light.shadow.mapSize.width = 1024;
+      light.shadow.mapSize.height = 1024;
       light.target = mesh1;
       scene.add( light );
+
+      var cameraHelper = new THREE.CameraHelper( light.shadow.camera );
+      scene.add( cameraHelper );
 
       // ambient light
       var ambient = new THREE.AmbientLight(0x666666);
       scene.add(ambient);
 
-      // 物体2
-      var mesh2 = new THREE.Mesh(
-        new THREE.CylinderGeometry( 0.3, 0.4, 1, 40, 40 ),
-        new THREE.MeshLambertMaterial({
-          color: 0xff0000,
-          wireframe: true
-        })
-      );
-      mesh2.position.set( 0.5, 0, 0 );
-      scene.add( mesh2 );
-
       var plane = new THREE.Mesh(
-        new THREE.PlaneGeometry( 2, 2 ),
+        new THREE.PlaneGeometry( 8, 8, 16, 16 ),
         new THREE.MeshLambertMaterial({
           color: 0xcccccc
         })
       );
-      plane.position.set( -0.5, -0.5, -0.5 );
+
+      plane.position.y = -1;
       plane.rotation.set( Math.PI / -2, 0, 0 );
       plane.receiveShadow = true;
       scene.add( plane );
 
       renderer.render( scene, camera );
+
+      requestAnimationFrame(draw);
+
+      function draw () {
+        alpha += 0.01;
+        if (alpha > Math.PI * 2) {
+          alpha -= Math.PI * 2;
+        }
+        mesh1.position.set(2 * Math.cos(alpha), 0, 2 * Math.sin(alpha));
+        renderer.render(scene, camera);
+        requestAnimationFrame(draw);
+      }
     </script>
   </body>
 </html>
