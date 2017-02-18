@@ -32,18 +32,30 @@
       scene.add( light );
 
       // 纹理
-      var texture = THREE.ImageUtils.loadTexture('')
+      var loader = new THREE.TextureLoader();
+      var materials = [];
+      for (var i = 0; i < 6; i++) {
+        materials.push(new THREE.MeshLambertMaterial({
+          map: loader.load( './' + i + '.png', function ( texture ) {
+            renderer.render( scene, camera );
+          })
+        }))
+      }
 
-      // 物体
-      var object = new THREE.Mesh(
-        new THREE.CubeGeometry( 1, 1, 1 ),
-        new THREE.MeshLambertMaterial({
-          map: texture
-        })
-      )
+      // 图形
+      var geometry = new THREE.CubeGeometry( 1, 1, 1 );
+
+      // // 材质
+      // var material = new THREE.MeshLambertMaterial({
+      //   map: loader.load('0.png', function ( texture ) {
+      //     renderer.render( scene, camera );
+      //   })
+      // });
+      //
+      // // 物体
+      // var object = new THREE.Mesh( geometry, material )
+      var object = new THREE.Mesh( geometry, new THREE.MultiMaterial( materials ) )
       scene.add( object );
-
-      renderer.render( scene, camera );
     </script>
   </body>
 </html>
