@@ -2,11 +2,11 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Point Light</title>
+    <title>Directional Light</title>
     <script src="../three.min.js" charset="utf-8"></script>
   </head>
   <body>
-    <p>点光源Demo</p>
+    <p>平行光Demo</p>
     <div class="container"></div>
     <script type="text/javascript">
       // 渲染器
@@ -28,7 +28,7 @@
       scene.add( camera );
 
       // 点光源
-      var light = new THREE.PointLight( 0xFF0000, 1, 100 );
+      var light = new THREE.DirectionalLight( 0xFF0000, 1 );
       light.position.set( -3, 2, 5 );
       scene.add( light );
 
