@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Phong Material</title>
+    <script src="../three.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script type="text/javascript">
+      var container = document.querySelector('#container');
+
+      // 渲染器
+      var renderer = new THREE.WebGLRenderer({
+        antialias: true
+      });
+      renderer.setSize( 400, 400 );
+      container.appendChild( renderer.domElement );
+      renderer.setClearColor( 0x000000 );
+
+      // 场景
+      var scene = new THREE.Scene();
+
+      // 相机
+      var camera = new THREE.OrthographicCamera( -1, 1, 1, -1, 1, 100 );
+      camera.position.set( 4, 3, 5 );
+      camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
+      scene.add( camera );
+
+      // 光源
+      var light = new THREE.PointLight( 0xffffff, 1, 100 );
+      light.position.set(10, 15, 5);
+      scene.add( light );
+
+      // 物体
+      var object = new THREE.Mesh(
+        new THREE.SphereGeometry( 1, 30, 30 ),
+        // new THREE.CubeGeometry( 1, 1, 1 ),
+        new THREE.MeshPhongMaterial({
+          color: 0xff0000,
+          specular: 0xffff00,
+          shininess: 1
+        })
+      )
+      scene.add( object );
+
+      renderer.render( scene, camera );
+    </script>
+  </body>
+</html>

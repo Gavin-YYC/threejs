@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Normal Material</title>
+    <script src="../three.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script type="text/javascript">
+      // 渲染器
+      var container = document.querySelector('#container');
+      var renderer = new THREE.WebGLRenderer({
+        antialias: true
+      });
+      renderer.setSize( 400, 400 );
+      renderer.setClearColor( 0x000000 );
+      container.appendChild( renderer.domElement );
+
+      // 场景
+      var scene = new THREE.Scene();
+
+      // 相机
+      var camera = new THREE.OrthographicCamera( -1, 1, 1, -1, 1, 100 );
+      camera.position.set( 4, 3, 5 );
+      camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
+      scene.add( camera );
+
+      // 灯光
+      var light = new THREE.PointLight( 0xffffff, 1, 100 );
+      light.position.set(10, 15, 5);
+      scene.add( light );
+
+      // 物体
+      var object = new THREE.Mesh(
+        new THREE.CubeGeometry( 1, 1, 1 ),
+        new THREE.MeshNormalMaterial()
+      );
+      scene.add( object );
+
+      renderer.render( scene, camera );
+    </script>
+  </body>
+</html>
